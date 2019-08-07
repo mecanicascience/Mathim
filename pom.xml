@@ -1,0 +1,123 @@
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	
+	<!-- =============================================================== -->
+	<!-- MAIN PROJECT INFORMATIONS -->
+	<!-- =============================================================== -->
+	<groupId>com.mecanicascience</groupId>
+	<artifactId>Mathim</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	
+	<name>Mathim</name>
+	<description>A math animation tool</description>
+	<url>http://maven.apache.org</url>
+	
+	
+	<organization>
+		<name>MecanicaScience</name>
+		<url>https://www.youtube.com/c/MecanicaScience</url>
+	</organization>
+	
+	
+	<developers>
+		<developer>
+			<email>mecanicasci@gmail.com</email>
+			<name>Maxime Dherbécourt</name>
+			<id>mecanicascience</id>
+		</developer>
+	</developers>
+	 
+	 
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- =============================================================== -->
+	<!-- CONFIGURATION PROPERTIES -->
+	<!-- =============================================================== -->
+	<properties>
+		<java.version>12</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- =============================================================== -->
+	<!-- BUILD -->
+	<!-- =============================================================== -->
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- Generate JAR file -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.0.2</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<!-- Manifest creation for MainClass -->
+						<manifest>
+							<mainClass>com.mecanicasci.mathim.MainClass</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+		
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+	</build>
+	
+	
+	
+	
+	
+	
+	
+	<!-- =============================================================== -->
+	<!-- DEPENDENCIES -->
+	<!-- =============================================================== -->
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
