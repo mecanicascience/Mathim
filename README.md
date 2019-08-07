@@ -10,4 +10,3 @@ This tool is used on the [MecanicaScience](https://www.youtube.com/c/MecanicaSci
 This code is non-profit and under developpement. Once launched, just modify the MainClass file.<br />
 MathAnimation was developped using the ffmpeg library.<br />
 Please feel free posting any suggestions about improvement or code implementations.
-<br />
