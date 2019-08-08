@@ -17,7 +17,7 @@ public final class Constants {
 	public static final int RENDERED_QUALITY = 15;
 	
 	/** FFMPEG rendering log level ("info" to show all informations) */
-	public static final String FFMPEG_ERROR_LEVEL = Debug.getFFMPEGLogLevel(Scene.debug); 
+	public static final String FFMPEG_ERROR_LEVEL = DebugLevel.getFFMPEGLogLevel(Scene.debug); 
 	
 	
 	
@@ -40,7 +40,7 @@ public final class Constants {
 	
 	/** ========== IMAGES AND VIDEO PATHS ========== */
 	/** Path to the folder that contains all rendered MP4 files */
-	public static final String PATH_TO_RENDER = "render/";
+	public static final String PATH_TO_RENDER = "rendered/";
 	/** Name of all temporary images */
 	public static final String IMAGE_TMP_ID = "frame_%04d.png";
 	/** Name of the file that describe all 'sub-mp4' files to render final mp4 */

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -16,9 +17,9 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import com.mecanicasci.mathim.animations.Animation;
-import com.mecanicasci.mathim.render.drawer.pixels.PixelDrawer;
+import com.mecanicasci.mathim.render.drawer.PixelDrawer;
 import com.mecanicasci.mathim.utils.Constants;
-import com.mecanicasci.mathim.utils.Debug;
+import com.mecanicasci.mathim.utils.DebugLevel;
 import com.mecanicasci.mathim.utils.FileUtils;
 
 public class Renderer {
@@ -91,7 +92,7 @@ public class Renderer {
 	private void renderAnimation(Animation animation) {
 		for (float t = 0; t < animation.getAnimLength().getDuration(); t += Constants.FRAME_DURATION) {
 			int[] pixels = PixelDrawer.getBlankPixelsArray();
-			pixels = animation.renderFrameAt(pixels, t, this);
+			animation.renderFrameAt(pixels, t);
 			
 			this.frames.add(pixels);
 		}
@@ -156,7 +157,7 @@ public class Renderer {
 
 		String text = builder.toString();
 		if (!text.isEmpty()) {
-			if(Scene.debug == Debug.SHOW_ALL) System.out.println("Below are logs while converting to video:\n    " + text);
+			if(Scene.debug == DebugLevel.SHOW_ALL) System.out.println("Below are logs while converting to video:\n    " + text);
 			else                              System.err.println("Error while converting to video:\n    " + text);
 			return;
 		}
@@ -180,6 +181,11 @@ public class Renderer {
 		try {
 			Path file = Paths.get(dir + "/" + Constants.FFMPEG_MP4_DESCRIPTION_FILE);
 			Files.write(file, lines, StandardCharsets.UTF_8);
+		}
+		catch (NoSuchFileException e) {
+			System.err.println("It appears that you forgot to add animations to the scene (nothing to render):");
+			e.printStackTrace();
+			return;
 		}
 		catch (IOException e) {
 			System.err.println("Error while generating animations list file:");
@@ -214,7 +220,7 @@ public class Renderer {
 
 			String text = builder.toString();
 			if (!text.isEmpty()) {
-				if(Scene.debug == Debug.SHOW_ALL) System.out.println("Below are logs while concating videos (1):\n    " + text);
+				if(Scene.debug == DebugLevel.SHOW_ALL) System.out.println("Below are logs while concating videos (1):\n    " + text);
 				else                              System.err.println("Error while concating videos (1):\n    " + text);
 				return;
 			}
@@ -243,6 +249,14 @@ public class Renderer {
 
 
 
+	
+	/**
+	 * Delete potential last files and folders
+	 * @param sceneName Name of the scene rendered
+	 */
+	public void cleanLastConfig(String sceneName) {
+		FileUtils.deleteDir(Paths.get(Constants.PATH_TO_RENDER + "partial/" + sceneName).toFile());
+	}
 
 	/**
 	 * Clean all temporary files after rendering
@@ -250,9 +264,9 @@ public class Renderer {
 	 * @param animations List of all animations
 	 */
 	public void clean(String sceneName, ArrayList<Animation> animations) {
-		if(Scene.debug == Debug.KEEP_ALL_TMP || Scene.debug == Debug.SHOW_ALL) return;
+		if(Scene.debug == DebugLevel.KEEP_ALL_TMP || Scene.debug == DebugLevel.SHOW_ALL) return;
 		
-		if(Scene.debug == Debug.NORMAL) {
+		if(Scene.debug == DebugLevel.NORMAL) {
 			FileUtils.deleteDir(Paths.get(Constants.PATH_TO_RENDER + "partial/" + sceneName).toFile());
 		}
 		else { // Debug.KEEP_MP4_TMP

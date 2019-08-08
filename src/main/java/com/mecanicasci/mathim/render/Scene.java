@@ -2,16 +2,18 @@ package com.mecanicasci.mathim.render;
 
 import java.util.ArrayList;
 
+import javax.management.InstanceNotFoundException;
+
 import com.mecanicasci.mathim.animations.Animation;
-import com.mecanicasci.mathim.animations.Animation.AnimationLength;
-import com.mecanicasci.mathim.animations.Animation.AnimationList;
+import com.mecanicasci.mathim.animations.utils.AnimationLength;
+import com.mecanicasci.mathim.animations.utils.AnimationList;
 import com.mecanicasci.mathim.gobject.GObject;
 import com.mecanicasci.mathim.utils.Constants;
-import com.mecanicasci.mathim.utils.Debug;
+import com.mecanicasci.mathim.utils.DebugLevel;
 
 public class Scene {
 	/** Debug level */
-	public static Debug debug = Debug.getDefault();
+	public static DebugLevel debug = DebugLevel.getDefault();
 	
 	/** Scene Renderer */
 	private Renderer renderer;
@@ -29,7 +31,7 @@ public class Scene {
 	 * @param name Name of the scene
 	 * @param debug Debug level
 	 */
-	public Scene(String name, Debug debug) {
+	public Scene(String name, DebugLevel debug) {
 		renderer   = new Renderer();
 		animations = new ArrayList<Animation>();
 		
@@ -45,7 +47,7 @@ public class Scene {
 	 * @return the new generated Scene
 	 */
 	public static Scene init(String name) {
-		return init(name, Debug.getDefault());
+		return init(name, DebugLevel.getDefault());
 	}
 	
 	/**
@@ -54,7 +56,7 @@ public class Scene {
 	 * @param debug Debug level
 	 * @return the new generated Scene
 	 */
-	public static Scene init(String name, Debug debug) {
+	public static Scene init(String name, DebugLevel debug) {
 		return new Scene(name, debug);
 	}
 	
@@ -70,7 +72,45 @@ public class Scene {
 	 * @return this
 	 */
 	public Scene animate(AnimationList animation, AnimationLength runtime, GObject... obj) {
-		animations.add(AnimationList.instanciateClassById(animation, runtime, obj));
+		return this.animate(animation, runtime, new Object[0], obj);
+	}
+	
+	/**
+	 * Add an animation
+	 * @param animation Animation name
+	 * @param runtime Runtime of the animation (null for default)
+	 * @param config Configuration of the GameObject
+	 * @param obj List of objects to animate 
+	 * @return this
+	 */
+	public Scene animate(AnimationList animation, AnimationLength runtime, Object config, GObject... obj) {
+		return this.animate(animation, runtime, new Object[] {config}, obj);
+	}
+	
+	
+	/**
+	 * Add an animation
+	 * @param animation Animation name
+	 * @param runtime Runtime of the animation
+	 * @param config Configuration of the GameObject
+	 * @param obj List of objects to animate 
+	 * @return this
+	 */
+	public Scene animate(AnimationList animation, AnimationLength runtime, Object[] config, GObject... obj) {
+		for (GObject gObject : obj) {
+			try {
+				if(!gObject.isInitialized())
+					throw new InstanceNotFoundException(
+						"GObject named " + gObject.getName() + " has not been initialized (you forgot to call the init() method on him)."
+					);
+			}
+			catch(InstanceNotFoundException e) {
+				e.printStackTrace();
+				return this;
+			}
+		}
+		
+		animations.add(AnimationList.instanciateClassById(animation, runtime, config, obj));
 		return this;
 	}
 	
@@ -81,6 +121,11 @@ public class Scene {
 	/** Render scene */
 	public void play() {
 		System.out.println("Starting rendering.\n\n");
+		
+		System.out.println("====== Cleaning last partial temporary files ======");
+		renderer.cleanLastConfig(sceneName);
+		System.out.println("====== End cleaning last partial temporary files ======\n\n\n");
+		
 		
 		int i = 0;
 		for (Animation animation : animations) {
@@ -99,7 +144,7 @@ public class Scene {
 		System.out.println("====== End compiling all animations ======");
 		
 		
-		if(debug.equals(Debug.NORMAL) || debug.equals(Debug.KEEP_MP4_TMP)) {
+		if(debug.equals(DebugLevel.NORMAL) || debug.equals(DebugLevel.KEEP_MP4_TMP)) {
 			System.out.println("\n\n====== Cleaning render temporary files ======");
 			renderer.clean(sceneName, animations);
 			System.out.println("====== End cleaning render temporary files ======");

@@ -1,25 +1,31 @@
 package com.mecanicasci.mathim;
 
-import com.mecanicasci.mathim.animations.Animation.AnimationLength;
-import com.mecanicasci.mathim.animations.Animation.AnimationList;
-import com.mecanicasci.mathim.gobject.elements.GSquare;
+import com.mecanicasci.mathim.animations.utils.AnimationLength;
+import com.mecanicasci.mathim.animations.utils.AnimationList;
+import com.mecanicasci.mathim.gobject.geometry.GCircle;
+import com.mecanicasci.mathim.gobject.geometry.GSquare;
 import com.mecanicasci.mathim.render.Scene;
-import com.mecanicasci.mathim.utils.Constants;
+import com.mecanicasci.mathim.utils.DebugLevel;
 
 public class MainClass {
 	public static void main(String[] args) {
 		GSquare square = new GSquare(50, 50, 50, 50);
 		square
-			.init()
-			.scale(1f)
-			.rotate(-Constants.PI / 4);
+			.init();
+//			.scale(1f)
+//			.rotate(-Constants.PI / 4);
+		
+		GCircle circle = new GCircle(50, 50, 10);
+		circle
+			.init();
 		
 		
 		Scene
-			.init("SimpleTest")
-			.animate(AnimationList.DRAW_ELEMENT, AnimationLength.LONG, square) /** @TODO Show rendering loading bar */
-			.animate(AnimationList.DRAW_ELEMENT, AnimationLength.getDefault(), square)
+			.init("SimpleTest", DebugLevel.KEEP_ALL_TMP)
+			.animate(AnimationList.STATIC_ANIMATION, AnimationLength.LONG, square)
 			.play();
+		
+		/** @TODO Show rendering loading bar */
 		
 		
 		
