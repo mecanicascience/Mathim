@@ -2,18 +2,21 @@ package com.mecanicasci.mathim.render;
 
 import java.util.ArrayList;
 
-import javax.management.InstanceNotFoundException;
-
 import com.mecanicasci.mathim.animations.Animation;
 import com.mecanicasci.mathim.animations.utils.AnimationLength;
 import com.mecanicasci.mathim.animations.utils.AnimationList;
 import com.mecanicasci.mathim.gobject.GObject;
+import com.mecanicasci.mathim.render.tex.TexRenderer;
 import com.mecanicasci.mathim.utils.Constants;
 import com.mecanicasci.mathim.utils.DebugLevel;
+import com.mecanicasci.mathim.utils.Logger;
 
 public class Scene {
 	/** Debug level */
 	public static DebugLevel debug = DebugLevel.getDefault();
+	/** True : Scene is initialized */
+	public static boolean isInitialized = false;
+	
 	
 	/** Scene Renderer */
 	private Renderer renderer;
@@ -21,6 +24,7 @@ public class Scene {
 	private ArrayList<Animation> animations;
 	/** Name of the Scene */
 	private String sceneName;
+
 	
 	
 	
@@ -37,6 +41,11 @@ public class Scene {
 		
 		this.sceneName = name;
 		Scene.debug    = debug;
+		
+		isInitialized = true;
+		
+		Logger.info("Starting rendering.\n\n\n", "==== Starting initial operations ====");
+		TexRenderer.cleanLastConfig();
 	}
 	
 	
@@ -98,16 +107,8 @@ public class Scene {
 	 */
 	public Scene animate(AnimationList animation, AnimationLength runtime, Object[] config, GObject... obj) {
 		for (GObject gObject : obj) {
-			try {
-				if(!gObject.isInitialized())
-					throw new InstanceNotFoundException(
-						"GObject named " + gObject.getName() + " has not been initialized (you forgot to call the init() method on him)."
-					);
-			}
-			catch(InstanceNotFoundException e) {
-				e.printStackTrace();
-				return this;
-			}
+			if(!gObject.isInitialized())
+				Logger.err("GObject named " + gObject.getName() + " has not been initialized (you forgot to call the init() method on him).", "Scene::animate()", true);
 		}
 		
 		animations.add(AnimationList.instanciateClassById(animation, runtime, config, obj));
@@ -120,37 +121,47 @@ public class Scene {
 
 	/** Render scene */
 	public void play() {
-		System.out.println("Starting rendering.\n\n");
-		
-		System.out.println("====== Cleaning last partial temporary files ======");
+		// INITIAL RENDERING OPERATIONS
+		Logger.info(" # Cleaning last partial rendering temporary files");
 		renderer.cleanLastConfig(sceneName);
-		System.out.println("====== End cleaning last partial temporary files ======\n\n\n");
+		Logger.info("==== End initial operations ====\n\n");
 		
 		
+		
+		// ANIMATIONS
+		Logger.info("==== Rendering animations ====");
 		int i = 0;
 		for (Animation animation : animations) {
 			i++;
-			System.out.println(String.format("=== %d/%d === Generating animation called \"%s\" (d = %ds) ======",
-					i, animations.size(), animation.getClass().getSimpleName(), (int) animation.getAnimLength().getDuration()));
+			Logger.info(
+				String.format(" # Generating animation %d/%d called \"%s\" (d = %ds)",
+				i, animations.size(), animation.getClass().getSimpleName(), (int) animation.getAnimLength().getDuration())
+			);
 			
 			renderer.render(animation, sceneName, i - 1);
-			
-			System.out.println(String.format("=== %d/%d === End generating animation ======\n\n", i, animations.size()));
 		}
 		
-		
-		System.out.println(String.format("\n====== Compiling all %d animations into one animation ======", animations.size()));
+		Logger.info(String.format(" # Compiling all %d animations into one animation", animations.size()));
 		renderer.compileAllAnimations(animations, String.format(Constants.PATH_TO_RENDER + "partial/%s", sceneName), sceneName);
-		System.out.println("====== End compiling all animations ======");
+		
+		Logger.info("==== End rendering animations ====\n\n");
 		
 		
+		
+		// END OPERATIONS
+		Logger.info("==== Running final operations ====");
 		if(debug.equals(DebugLevel.NORMAL) || debug.equals(DebugLevel.KEEP_MP4_TMP)) {
-			System.out.println("\n\n====== Cleaning render temporary files ======");
+			Logger.info(" # Cleaning LaTeX temporary files");
+			TexRenderer.clean();
+			
+			Logger.info(" # Cleaning rendering temporary files");
 			renderer.clean(sceneName, animations);
-			System.out.println("====== End cleaning render temporary files ======");
 		}
+		Logger.info("==== End running final operations ====\n\n\n");
 		
 		
-		System.out.println(String.format("\n\nRendering done.\nSee the file '%s'.", Constants.PATH_TO_RENDER + sceneName + ".mp4"));
+		
+		// DONE
+		Logger.info(String.format("Rendering done.\nCheck file '%s'.", Constants.PATH_TO_RENDER + sceneName + ".mp4"));
 	}
 }

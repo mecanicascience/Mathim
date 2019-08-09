@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.mecanicasci.mathim.gobject.GObject;
 import com.mecanicasci.mathim.render.drawer.MainShapesDrawer;
+import com.mecanicasci.mathim.utils.Logger;
 
 /**
  * A path that renders a specific path
@@ -111,7 +112,7 @@ public class GPath {
 				break;
 				
 				
-			case HORIZONTAL_REL:
+			case HORIZONTAL:
 				if(checkParamsLength(2, false, params))
 					thickness = (int) params[2];
 				
@@ -129,7 +130,7 @@ public class GPath {
 				break;
 				
 				
-			case VERTICAL_REL:
+			case VERTICAL:
 				if(checkParamsLength(2, false, params))
 					thickness = (int) params[2];
 				
@@ -150,6 +151,10 @@ public class GPath {
 				
 			case INITIAL_POINT:
 				break;
+				
+				
+			default:
+				throw new IllegalArgumentException("Type currently not implemented in SVG rendering engine: " + pathType);
 		}
 		
 		return this;
@@ -179,11 +184,11 @@ public class GPath {
 	private boolean checkParamsLength(int length, boolean throwError, float... params) {
 		if(params.length >= length) return true;
 		else if(throwError) {
-			System.err.println(
-					"ERROR at checkParamsLength() :"
-					+ "\nThe number of parameters of a path element is not correct, for GObject called " + parent.getName() + "."
+			Logger.err(
+				"The number of parameters of a path element is not correct, for GObject called " + parent.getName() + ".",
+				"GPath::checkParamsLength()",
+				true
 			);
-			System.exit(-1);
 			return false;
 		}
 		return false;
@@ -228,16 +233,16 @@ public class GPath {
 				case LINE_TO_ABS:
 				case LINE_TO:
 				case HORIZONTAL_ABS:
-				case HORIZONTAL_REL:
+				case HORIZONTAL:
 				case VERTICAL_ABS:
-				case VERTICAL_REL:
+				case VERTICAL:
 				case ENDING_POINT:
 					MainShapesDrawer.drawLine(pixels, pt.lastPoint.x, pt.lastPoint.y, pt.x, pt.y, pt.thickness);
 					break;
 					
 	
 				default:
-					throw new IllegalArgumentException("Type currently not implemented in SVG rendering engine: " + pt.pathType);
+					Logger.err("Type currently not implemented in SVG rendering engine: " + pt.pathType, "GPath::renderAtTime()", true);
 			}
 		}
 	}

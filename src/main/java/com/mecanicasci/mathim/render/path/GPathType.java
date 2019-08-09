@@ -1,6 +1,7 @@
 package com.mecanicasci.mathim.render.path;
 
 /**
+ * Similar as SVG path parameters
  * Based on <a href="https://la-cascade.io/svg-la-syntaxe-path/">https://la-cascade.io/svg-la-syntaxe-path/</a>
  */
 @SuppressWarnings("javadoc")
@@ -48,7 +49,7 @@ public enum GPathType {
 	/**
 	 * Equivalent to 'h'
 	 */
-	HORIZONTAL_REL,
+	HORIZONTAL,
 	
 	/**
 	 * Equivalent to 'V'
@@ -58,5 +59,55 @@ public enum GPathType {
 	/**
 	 * Equivalent to 'v'
 	 */
-	VERTICAL_REL
+	VERTICAL,
+	
+	/**
+	 * Equivalent to 'C'
+	 */
+	CURVE_BEZ,
+	
+	/**
+	 * Equivalent to 'c'
+	 */
+	CURVE_BEZ_ABS,
+	
+	/**
+	 * Equivalent to 'S'
+	 */
+	SHORTHAND_CURVE_BEZ,
+	
+	/**
+	 * Equivalent to 's'
+	 */
+	SHORTHAND_CURVE_BEZ_ABS,
+	
+	/**
+	 * Equivalent to 'Q'
+	 */
+	QUADRATIC_CURVE_BEZ,
+	
+	/**
+	 * Equivalent to 'q'
+	 */
+	QUADRATIC_CURVE_BEZ_ABS,
+	
+	/**
+	 * Equivalent to 'T'
+	 */
+	SHORTHAND_QUADRATIC_CURVE_BEZ,
+	
+	/**
+	 * Equivalent to 't'
+	 */
+	SHORTHAND_QUADRATIC_CURVE_BEZ_ABS,
+	
+	/**
+	 * Equivalent to 'A'
+	 */
+	ELLIPTICAL_ARC,
+	
+	/**
+	 * Equivalent to 'a'
+	 */
+	ELLIPTICAL_ARC_ABS
 }

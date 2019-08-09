@@ -2,10 +2,8 @@ package com.mecanicasci.mathim.render;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -21,6 +19,7 @@ import com.mecanicasci.mathim.render.drawer.PixelDrawer;
 import com.mecanicasci.mathim.utils.Constants;
 import com.mecanicasci.mathim.utils.DebugLevel;
 import com.mecanicasci.mathim.utils.FileUtils;
+import com.mecanicasci.mathim.utils.Logger;
 
 public class Renderer {
 	/** Pixels list [r, g, b, a] */
@@ -77,7 +76,7 @@ public class Renderer {
 		try {
 			this.generateMP4(animation.getName(), dir);
 		}
-		catch(IOException e) { System.err.println("Error while generating MP4:\n   " + e); }
+		catch(IOException e) { Logger.err("Error while generating MP4 for animation with id " + animationID, e, "Renderer::render()", false); }
 	}
 	
 	
@@ -117,7 +116,7 @@ public class Renderer {
 				ImageIO.write(img, "png",  new File(String.format(path + Constants.IMAGE_TMP_ID, image_index)));
 				image_index++;
 			}
-			catch(IOException e) { e.printStackTrace(); }
+			catch(IOException e) { Logger.err("Error exporting PNG Frames", e, "Renderer::exportPNGFrames()", false); }
 		}
 	}
 	
@@ -147,20 +146,12 @@ public class Renderer {
 		Runtime rt = Runtime.getRuntime();
 		Process pr = rt.exec(str, null, new File(dir));
 		
-		BufferedReader in = new BufferedReader(new InputStreamReader(pr.getErrorStream()));
-		StringBuilder builder = new StringBuilder();
-		String aux = "";
-
-		while ((aux = in.readLine()) != null) {
-		    builder.append(aux);
-		}
-
-		String text = builder.toString();
-		if (!text.isEmpty()) {
-			if(Scene.debug == DebugLevel.SHOW_ALL) System.out.println("Below are logs while converting to video:\n    " + text);
-			else                              System.err.println("Error while converting to video:\n    " + text);
-			return;
-		}
+		Logger.handleErrorFromProcess(
+			"Error while generating a specific MP4 file for animation " + animationName + ":",
+			"Logs while generating a specific MP4 file for animation " + animationName + ":",
+			pr,
+			"Renderer::generateMP4()"
+		);
 	}
 
 
@@ -183,13 +174,11 @@ public class Renderer {
 			Files.write(file, lines, StandardCharsets.UTF_8);
 		}
 		catch (NoSuchFileException e) {
-			System.err.println("It appears that you forgot to add animations to the scene (nothing to render):");
-			e.printStackTrace();
+			Logger.err("It appears that you forgot to add animations to the scene (nothing to render)", e, "Renderer::compileAllAnimations()", false);
 			return;
 		}
 		catch (IOException e) {
-			System.err.println("Error while generating animations list file:");
-			e.printStackTrace();
+			Logger.err("Error while generating animations list file", e, "Renderer::compileAllAnimations()", false);
 			return;
 		}
 		
@@ -205,31 +194,18 @@ public class Renderer {
 				+ " -c "        + "copy"
 				+ " " + outputFileName;
 			
-			
 		try {
 			Runtime rt = Runtime.getRuntime();
 			Process pr = rt.exec(str, null, new File(dir));
 			
-			BufferedReader in = new BufferedReader(new InputStreamReader(pr.getErrorStream()));
-			StringBuilder builder = new StringBuilder();
-			String aux = "";
-
-			while ((aux = in.readLine()) != null) {
-			    builder.append(aux);
-			}
-
-			String text = builder.toString();
-			if (!text.isEmpty()) {
-				if(Scene.debug == DebugLevel.SHOW_ALL) System.out.println("Below are logs while concating videos (1):\n    " + text);
-				else                              System.err.println("Error while concating videos (1):\n    " + text);
-				return;
-			}
+			Logger.handleErrorFromProcess(
+				"Logs while concating animations videos:",
+				"Error while concating MP4 animations videos (1)",
+				pr,
+				"Renderer::compileAllAnimations()"
+			);
 		}
-		catch (IOException e) {
-			System.err.println("Error while concating videos (2):");
-			e.printStackTrace();
-			return;
-		}
+		catch (IOException e) { Logger.err("Error while concating MP4 animations videos (2)", "Renderer::compileAllAnimations()", false); }
 		
 		
 		// copy generated file
@@ -240,10 +216,7 @@ public class Renderer {
 				StandardCopyOption.REPLACE_EXISTING
 			);
 		}
-		catch (IOException e) {
-			System.err.println("Error while copying final video:");
-			e.printStackTrace();
-		}
+		catch (IOException e) { Logger.err("Error while copying final video", "Renderer::compileAllAnimations()", false); }
 	}
 
 
@@ -258,6 +231,7 @@ public class Renderer {
 		FileUtils.deleteDir(Paths.get(Constants.PATH_TO_RENDER + "partial/" + sceneName).toFile());
 	}
 
+	
 	/**
 	 * Clean all temporary files after rendering
 	 * @param sceneName Name of the scene rendered

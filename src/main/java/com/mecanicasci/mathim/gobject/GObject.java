@@ -2,7 +2,9 @@ package com.mecanicasci.mathim.gobject;
 
 import java.util.ArrayList;
 
+import com.mecanicasci.mathim.render.Scene;
 import com.mecanicasci.mathim.render.path.GPath;
+import com.mecanicasci.mathim.utils.Logger;
 
 public abstract class GObject {
 	/** X initial square coordinate */
@@ -40,6 +42,8 @@ public abstract class GObject {
 	 * @return this
 	 */
 	public GObject init() {
+		if(!Scene.isInitialized) Logger.err("You must initialize the Scene before creating GObjects.", "GObject::init()", true);
+		
 		this.generateVertices();
 		this.isInitialized = true;
 		

@@ -31,6 +31,7 @@ public final class MainShapesDrawer {
 	
 	/**
 	 * Draw a line from ABSOLUTE locations
+	 * @TODO implements thickness
 	 * @param pixels Pixel array that needs to be updated
 	 * @param xInit Initial X line position
 	 * @param yInit Initial Y line position
