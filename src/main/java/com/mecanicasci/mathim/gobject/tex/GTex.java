@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.mecanicasci.mathim.gobject.GObject;
 import com.mecanicasci.mathim.render.tex.TexParser;
 import com.mecanicasci.mathim.render.tex.TexRenderer;
+import com.mecanicasci.mathim.render.tex.TexUseElement;
 
 public class GTex extends GObject {
 	private ArrayList<TexUseElement> elements;

@@ -14,7 +14,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.mecanicasci.mathim.gobject.tex.TexUseElement;
 import com.mecanicasci.mathim.utils.Logger;
 
 
@@ -42,14 +41,18 @@ public class TexParser {
 				for (int j = 0; j < paths.getLength(); j++) {
 					Node item = paths.item(j);
 					if(item.getNodeName().equals("use")) {
-						pathToId.add(new TexUseElement(
-							Float.parseFloat(item.getAttributes().getNamedItem("x").getNodeValue()),
-							Float.parseFloat(item.getAttributes().getNamedItem("y").getNodeValue()),
-							item.getAttributes().getNamedItem("xlink:href").getNodeValue(),
-							doc,
-							viewBox
-						));
+						String[] path = TexUseElementUtils.getPathFromId(item.getAttributes().getNamedItem("xlink:href").getNodeValue(), doc).split("Z");
+						
+						for (int k = 0; k < path.length; k++)
+							pathToId.add(new TexUseElement(
+								Float.parseFloat(item.getAttributes().getNamedItem("x").getNodeValue()),
+								Float.parseFloat(item.getAttributes().getNamedItem("y").getNodeValue()),
+								viewBox,
+								path[k] + "Z"
+							));
 					}
+					else
+						Logger.warn("The SVG element " + item.getNodeName() + " is undefined", "TexParser::parseSVGTex()");
 				}
 			}
 			

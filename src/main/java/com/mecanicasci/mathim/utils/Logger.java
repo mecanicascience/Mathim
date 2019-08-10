@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import com.mecanicasci.mathim.config.DebugLevel;
 import com.mecanicasci.mathim.render.Scene;
 
 public final class Logger {
@@ -16,6 +17,18 @@ public final class Logger {
 			System.out.println(string);
 	}
 
+	
+	
+	
+	/**
+	 * Log a specific String (as a warning)
+	 * @param text Text of the warning
+	 * @param functionId Identifier of the function typeof CLASS_NAME::FUNCTION_NAME()
+	 */
+	public static void warn(String text, String functionId) {
+		System.err.println("Warning at " + functionId + ":\n   " + text);
+	}
+	
 	
 	
 	

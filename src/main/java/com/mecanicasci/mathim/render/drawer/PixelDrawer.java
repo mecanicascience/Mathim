@@ -1,6 +1,6 @@
 package com.mecanicasci.mathim.render.drawer;
 
-import com.mecanicasci.mathim.utils.Constants;
+import com.mecanicasci.mathim.config.Constants;
 
 public final class PixelDrawer {
 	/** @return an array full of white pixels */

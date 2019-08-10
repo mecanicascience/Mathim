@@ -1,6 +1,6 @@
 package com.mecanicasci.mathim.render.drawer;
 
-import com.mecanicasci.mathim.utils.Constants;
+import com.mecanicasci.mathim.config.Constants;
 
 /**
  * Based on the algorithm from <a href="http://members.chello.at/~easyfilter/bresenham.html">http://members.chello.at/~easyfilter/bresenham.html</a>.

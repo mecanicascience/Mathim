@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import com.mecanicasci.mathim.animations.Animation;
 import com.mecanicasci.mathim.animations.utils.AnimationLength;
 import com.mecanicasci.mathim.animations.utils.AnimationList;
+import com.mecanicasci.mathim.config.Constants;
+import com.mecanicasci.mathim.config.DebugLevel;
 import com.mecanicasci.mathim.gobject.GObject;
 import com.mecanicasci.mathim.render.tex.TexRenderer;
-import com.mecanicasci.mathim.utils.Constants;
-import com.mecanicasci.mathim.utils.DebugLevel;
 import com.mecanicasci.mathim.utils.Logger;
 
 public class Scene {

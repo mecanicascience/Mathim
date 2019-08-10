@@ -1,4 +1,4 @@
-package com.mecanicasci.mathim.utils;
+package com.mecanicasci.mathim.config;
 
 import com.mecanicasci.mathim.render.Scene;
 

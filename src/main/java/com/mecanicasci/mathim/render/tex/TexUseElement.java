@@ -1,8 +1,12 @@
-package com.mecanicasci.mathim.gobject.tex;
+package com.mecanicasci.mathim.render.tex;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import java.util.ArrayList;
+
+import com.mecanicasci.mathim.config.Constants;
+import com.mecanicasci.mathim.gobject.tex.GTex;
+import com.mecanicasci.mathim.render.path.GPath;
+import com.mecanicasci.mathim.render.path.GPathType;
+import com.mecanicasci.mathim.utils.MathUtils;
 
 
 /**
@@ -48,58 +52,69 @@ public class TexUseElement {
 	 * Tex Element from Tex SVG String
 	 * @param x X element value
 	 * @param y Y element value
-	 * @param linkHref Relative href of the element
-	 * @param doc Main XML Document
 	 * @param viewBox ViewBox of the xml
+	 * @param path Path of the SVG element
 	 */
-	public TexUseElement(float x, float y, String linkHref, Document doc, String viewBox) {
+	public TexUseElement(float x, float y, String viewBox, String path) {
 		this.elementX = x;
 		this.elementY = y;
-		this.path = this.getPathFromId(linkHref, doc);
+		this.path = path;
 		
 		String[] viewB = viewBox.split(" ");
 		this.width   = Float.parseFloat(viewB[2]);
 		this.height  = Float.parseFloat(viewB[3]);
 		this.svgMinX = Float.parseFloat(viewB[0]);
-		this.svgMinY = Float.parseFloat(viewB[1]);
+		this.svgMinY = Float.parseFloat(viewB[1]); 
 	}
 
 	
-	
+
+
+
 	/**
-	 * Generate path from this TexElement
+	 * Generate GPath from this TexElement
 	 * @param gTexParent From GTex object parent
 	 */
 	public void generatePath(GTex gTexParent) {
-//		gTex.newPath(gTex, elementX - 50 / 2, elementY - 50 / 2)
-//			.add(GPathType.LINE_TO,  50,  0, 5)
-//			.add(GPathType.LINE_TO,  0,  50)
-//			.add(GPathType.LINE_TO, -50,  0)
-//			.close();
-	}
-	
-	
-	
-	
-	
-	/**
-	 * Get the SVG String path from the link
-	 * @param linkHref
-	 * @param doc
-	 */
-	private String getPathFromId(String linkHref, Document doc) {
-		NodeList defs = doc.getElementsByTagName("defs");
+		float relX = (elementX - svgMinX) / width  * Constants.RELATIVE_WIDTH;
+		float relY = (elementY - svgMinY) / height * Constants.RELATIVE_HEIGHT;
 		
-		for (int i = 0; i < defs.getLength(); i++) {
-			NodeList paths = defs.item(i).getChildNodes();
-			for (int j = 0; j < paths.getLength(); j++) {
-				Node item = paths.item(j);
-				if(item.getNodeName().equals("path") && item.getAttributes().getNamedItem("id").getNodeValue().equals(linkHref.split("#")[1])) {
-					return item.getAttributes().getNamedItem("d").getNodeValue();
+		String[] pathSpl 		= path.split("");
+		GPath p 		 		= gTexParent.newPath(gTexParent, relX, relY);
+		String tmpStringToFloat = "";
+		
+		int letterId 			= 0;
+		ArrayList<Float> params = null;
+		String paramId 			= null;
+		
+		
+		while(letterId < pathSpl.length) {
+			String c = pathSpl[letterId];
+			
+			if(Character.isLetter(c.charAt(0))) { // c equals letter
+				if(params != null && paramId != null) {// ifnot first char
+					params.add(Float.parseFloat(tmpStringToFloat));
+					p.add(GPathType.toPathType(paramId), MathUtils.toFloatArray(params));
+					
+					tmpStringToFloat = "";
 				}
+				
+				params  = new ArrayList<Float>();
+				paramId = c;
+				
+				if(c.equals("Z")) // close path
+					p.close();
 			}
+			else if(params != null) { // c equals float
+				if(c.equals(" ")) {
+					params.add(Float.parseFloat(tmpStringToFloat));
+					tmpStringToFloat = "";
+				}
+				else
+					tmpStringToFloat += c;
+			}
+			
+			letterId++;
 		}
-		
-		return "";
 	}
 }

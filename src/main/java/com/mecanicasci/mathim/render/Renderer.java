@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import com.mecanicasci.mathim.animations.Animation;
+import com.mecanicasci.mathim.config.Constants;
+import com.mecanicasci.mathim.config.DebugLevel;
 import com.mecanicasci.mathim.render.drawer.PixelDrawer;
-import com.mecanicasci.mathim.utils.Constants;
-import com.mecanicasci.mathim.utils.DebugLevel;
 import com.mecanicasci.mathim.utils.FileUtils;
 import com.mecanicasci.mathim.utils.Logger;
 

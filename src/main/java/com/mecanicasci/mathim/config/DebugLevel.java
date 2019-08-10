@@ -1,4 +1,4 @@
-package com.mecanicasci.mathim.utils;
+package com.mecanicasci.mathim.config;
 
 public enum DebugLevel {
 	/** (Log level 1/4) DEFAULT VALUE : Delete all temporary files after rendering */

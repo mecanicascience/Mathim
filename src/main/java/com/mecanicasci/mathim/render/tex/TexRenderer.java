@@ -9,9 +9,9 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import com.mecanicasci.mathim.config.Constants;
+import com.mecanicasci.mathim.config.DebugLevel;
 import com.mecanicasci.mathim.render.Scene;
-import com.mecanicasci.mathim.utils.Constants;
-import com.mecanicasci.mathim.utils.DebugLevel;
 import com.mecanicasci.mathim.utils.FileUtils;
 import com.mecanicasci.mathim.utils.Logger;
 

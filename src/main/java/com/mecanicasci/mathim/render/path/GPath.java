@@ -58,103 +58,116 @@ public class GPath {
 	
 	
 	/**
-	 * Add a new type to the path
+	 * Add a new type to the path (from <a href="https://www.w3.org/TR/SVG/paths.html#PathData">https://www.w3.org/TR/SVG/paths.html#PathData</a>)
 	 * @param pathType Type of type
 	 * @param params Params of the path
 	 * @return this
 	 */
 	public GPath add(GPathType pathType, float... params) {
+		/** @TODO add thickness */
 		int thickness = 1;
 		
 		switch (pathType) {
-			case MOVE_TO_ABS:
-				if(checkParamsLength(3, false, params))
-					thickness = (int) params[2];
+			case INITIAL_POINT:
+				break;
+		
 				
+			case MOVE_TO_ABS:
 				if(checkParamsLength(2, params))
 					newPoint(params[0], params[1], thickness, pathType, params);
 				break;
 				
 				
 			case MOVE_TO:
-				if(checkParamsLength(3, false, params))
-					thickness = (int) params[2];
-				
 				if(checkParamsLength(2, params))
 					newPoint(lastPointAdded().x + params[0], lastPointAdded().y + params[1], thickness, pathType, params);
 				break;
 				
 				
 			case LINE_TO_ABS:
-				if(checkParamsLength(3, false, params))
-					thickness = (int) params[2];
-				
 				if(checkParamsLength(2, params))
 					newPoint(params[0], params[1], thickness, pathType, params);
 				break;
 				
 				
 			case LINE_TO:
-				if(checkParamsLength(3, false, params))
-					thickness = (int) params[2];
-				
 				if(checkParamsLength(2, params))
 					newPoint(lastPointAdded().x + params[0], lastPointAdded().y + params[1], thickness, pathType, params);
 				break;
 				
 				
 			case HORIZONTAL_ABS:
-				if(checkParamsLength(2, false, params))
-					thickness = (int) params[2];
-				
 				if(checkParamsLength(1, params))
 					newPoint(params[0], lastPointAdded().y, thickness, pathType, params);
 				break;
 				
 				
 			case HORIZONTAL:
-				if(checkParamsLength(2, false, params))
-					thickness = (int) params[2];
-				
 				if(checkParamsLength(1, params))
 					newPoint(lastPointAdded().x + params[0], lastPointAdded().y, thickness, pathType, params);
 				break;
 				
 				
 			case VERTICAL_ABS:
-				if(checkParamsLength(2, false, params))
-					thickness = (int) params[2];
-				
 				if(checkParamsLength(1, params))
 					newPoint(lastPointAdded().x, params[0], thickness, pathType, params);
 				break;
 				
 				
 			case VERTICAL:
-				if(checkParamsLength(2, false, params))
-					thickness = (int) params[2];
-				
 				if(checkParamsLength(1, params))
 					newPoint(lastPointAdded().x, lastPointAdded().y + params[0], thickness, pathType, params);
 				break;
 				
 				
+			case CURVE_BEZ:
+				break;
+				
+				
+			case CURVE_BEZ_ABS:
+				break;
+				
+				
+			case SHORTHAND_CURVE_BEZ:
+				break;
+				
+				
+			case SHORTHAND_CURVE_BEZ_ABS:
+				break;
+				
+				
+			case QUADRATIC_CURVE_BEZ:
+				break;
+				
+				
+			case QUADRATIC_CURVE_BEZ_ABS:
+				break;
+				
+				
+			case SHORTHAND_QUADRATIC_CURVE_BEZ:
+				break;
+				
+				
+			case SHORTHAND_QUADRATIC_CURVE_BEZ_ABS:
+				break;
+				
+				
+			case ELLIPTICAL_ARC:
+				break;
+				
+				
+			case ELLIPTICAL_ARC_ABS:
+				break;
 				
 				
 			case ENDING_POINT:
-				if(checkParamsLength(3, false, params))
-					thickness = (int) params[2];
-				
 				if(checkParamsLength(2, params))
 					newPoint(params[0], params[1], thickness, pathType, params);
 				break;
 				
-			case INITIAL_POINT:
-				break;
-				
 				
 			default:
-				throw new IllegalArgumentException("Type currently not implemented in SVG rendering engine: " + pathType);
+				Logger.err("Type currently not implemented in SVG rendering engine: " + pathType, "GPath::add()", false);
 		}
 		
 		return this;
