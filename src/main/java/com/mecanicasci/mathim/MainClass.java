@@ -5,11 +5,12 @@ import com.mecanicasci.mathim.animations.utils.AnimationList;
 import com.mecanicasci.mathim.gobject.geometry.GSquare;
 import com.mecanicasci.mathim.gobject.tex.GTex;
 import com.mecanicasci.mathim.render.Scene;
+import com.mecanicasci.mathim.utils.DebugLevel;
 
 public class MainClass {
 	public static void main(String[] args) {
 		// ==== Scene ====
-		Scene scene = Scene.init("SimpleTest");
+		Scene scene = Scene.init("SimpleTest", DebugLevel.SHOW_ALL);
 		
 		
 		// ==== GObjects ====

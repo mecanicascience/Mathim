@@ -79,7 +79,7 @@ public abstract class GObject {
 	 * @param initialY
 	 * @return the new GPath instance
 	 */
-	protected GPath newPath(GObject parent, float initialX, float initialY) {
+	public GPath newPath(GObject parent, float initialX, float initialY) {
 		GPath obj = new GPath(parent, initialX, initialY);
 		pathList.add(obj);
 		
