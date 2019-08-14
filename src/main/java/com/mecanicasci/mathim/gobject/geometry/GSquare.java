@@ -30,7 +30,8 @@ public class GSquare extends GObject {
 	
 	@Override
 	protected void generateVertices() {
-		newPath(this, x - w / 2, y - h / 2) // centered by middle
+		newPath(this) // centered by middle
+			.add(GPathType.MOVE_TO,  x - w / 2, y - h / 2)
 			.add(GPathType.LINE_TO,  w,  0)
 			.add(GPathType.LINE_TO,  0,  h)
 			.add(GPathType.LINE_TO, -w,  0)

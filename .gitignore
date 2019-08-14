@@ -91,4 +91,4 @@ log/
 target/
 
 # Custom
-render/partial
+rendered/partial/

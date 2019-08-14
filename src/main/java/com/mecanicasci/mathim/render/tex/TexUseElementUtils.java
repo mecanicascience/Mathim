@@ -20,8 +20,9 @@ public final class TexUseElementUtils {
 			for (int j = 0; j < paths.getLength(); j++) {
 				Node item = paths.item(j);
 				
-				if(item.getNodeName().equals("path") && item.getAttributes().getNamedItem("id").getNodeValue().equals(linkHref.split("#")[1]))
+				if(item.getNodeName().equals("path") && item.getAttributes().getNamedItem("id").getNodeValue().equals(linkHref.split("#")[1])) {
 					return item.getAttributes().getNamedItem("d").getNodeValue();
+				}
 			}
 		}
 		

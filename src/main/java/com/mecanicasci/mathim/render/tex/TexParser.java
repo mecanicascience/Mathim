@@ -43,13 +43,14 @@ public class TexParser {
 					if(item.getNodeName().equals("use")) {
 						String[] path = TexUseElementUtils.getPathFromId(item.getAttributes().getNamedItem("xlink:href").getNodeValue(), doc).split("Z");
 						
-						for (int k = 0; k < path.length; k++)
+						for (int k = 0; k < path.length; k++) {
 							pathToId.add(new TexUseElement(
-								Float.parseFloat(item.getAttributes().getNamedItem("x").getNodeValue()),
-								Float.parseFloat(item.getAttributes().getNamedItem("y").getNodeValue()),
+								Double.parseDouble(item.getAttributes().getNamedItem("x").getNodeValue()),
+								Double.parseDouble(item.getAttributes().getNamedItem("y").getNodeValue()),
 								viewBox,
 								path[k] + "Z"
 							));
+						}
 					}
 					else
 						Logger.warn("The SVG element " + item.getNodeName() + " is undefined", "TexParser::parseSVGTex()");

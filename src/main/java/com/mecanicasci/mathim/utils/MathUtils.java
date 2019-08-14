@@ -17,4 +17,20 @@ public final class MathUtils {
 		
 		return floatArray;
 	}
+	
+	
+	/**
+	 * Create a float array from an arrayList
+	 * @param params ArrayList to convert
+	 * @return the float array
+	 */
+	public static double[] toDoubleArray(ArrayList<Double> params) {
+		double[] floatArray = new double[params.size()];
+		int i = 0;
+
+		for (Double f : params)
+		    floatArray[i++] = (f != null ? f : Float.NaN);
+		
+		return floatArray;
+	}
 }

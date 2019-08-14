@@ -2,7 +2,6 @@ package com.mecanicasci.mathim.render.tex;
 
 import java.util.ArrayList;
 
-import com.mecanicasci.mathim.config.Constants;
 import com.mecanicasci.mathim.gobject.tex.GTex;
 import com.mecanicasci.mathim.render.path.GPath;
 import com.mecanicasci.mathim.render.path.GPathType;
@@ -29,9 +28,9 @@ public class TexUseElement {
 	private float svgMinY;
 	
 	/** X relative element offset (not inverted : lower means left) */
-	private float elementX;
+	private double elementX;
 	/** Y relative element offset (not inverted : lower means top) */
-	private float elementY;
+	private double elementY;
 	
 	/**
 	 * Element String raw path
@@ -43,7 +42,7 @@ public class TexUseElement {
 	 * 	Z
 	 * 	"
 	 */
-	private String path;
+	public String path;
 	
 	
 	
@@ -55,16 +54,17 @@ public class TexUseElement {
 	 * @param viewBox ViewBox of the xml
 	 * @param path Path of the SVG element
 	 */
-	public TexUseElement(float x, float y, String viewBox, String path) {
+	public TexUseElement(double x, double y, String viewBox, String path) {
 		this.elementX = x;
 		this.elementY = y;
 		this.path = path;
 		
 		String[] viewB = viewBox.split(" ");
-		this.width   = Float.parseFloat(viewB[2]);
-		this.height  = Float.parseFloat(viewB[3]);
+		
 		this.svgMinX = Float.parseFloat(viewB[0]);
 		this.svgMinY = Float.parseFloat(viewB[1]); 
+		this.width   = Float.parseFloat(viewB[2]);
+		this.height  = Float.parseFloat(viewB[3]);
 	}
 
 	
@@ -76,30 +76,27 @@ public class TexUseElement {
 	 * @param gTexParent From GTex object parent
 	 */
 	public void generatePath(GTex gTexParent) {
-		float relX = (elementX - svgMinX) / width  * Constants.RELATIVE_WIDTH;
-		float relY = (elementY - svgMinY) / height * Constants.RELATIVE_HEIGHT;
+		String[] pathSpl 		 = path.split("");
+		GPath p 		 		 = gTexParent.newPath(gTexParent, elementX - svgMinX, elementY - svgMinY, width, height);
+		String tmpStringToFloat  = "";
 		
-		String[] pathSpl 		= path.split("");
-		GPath p 		 		= gTexParent.newPath(gTexParent, relX, relY);
-		String tmpStringToFloat = "";
-		
-		int letterId 			= 0;
-		ArrayList<Float> params = null;
-		String paramId 			= null;
+		int letterId 			 = 0;
+		ArrayList<Double> params = null;
+		String paramId 			 = null;
 		
 		
 		while(letterId < pathSpl.length) {
 			String c = pathSpl[letterId];
 			
-			if(Character.isLetter(c.charAt(0))) { // c equals letter
+			if(c != null && c.length() >= 1 && Character.isLetter(c.charAt(0))) { // c equals letter
 				if(params != null && paramId != null) {// ifnot first char
-					params.add(Float.parseFloat(tmpStringToFloat));
-					p.add(GPathType.toPathType(paramId), MathUtils.toFloatArray(params));
+					params.add(Double.parseDouble(tmpStringToFloat));
+					p.add(GPathType.toPathType(paramId), width, height, true, MathUtils.toDoubleArray(params));
 					
 					tmpStringToFloat = "";
 				}
 				
-				params  = new ArrayList<Float>();
+				params  = new ArrayList<Double>();
 				paramId = c;
 				
 				if(c.equals("Z")) // close path
@@ -107,7 +104,8 @@ public class TexUseElement {
 			}
 			else if(params != null) { // c equals float
 				if(c.equals(" ")) {
-					params.add(Float.parseFloat(tmpStringToFloat));
+					params.add(Double.parseDouble(tmpStringToFloat));
+					
 					tmpStringToFloat = "";
 				}
 				else

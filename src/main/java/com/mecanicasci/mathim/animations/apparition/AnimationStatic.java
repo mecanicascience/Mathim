@@ -21,7 +21,7 @@ public class AnimationStatic extends Animation {
 	
 	
 	@Override
-	public void renderFrameAt(int[] pixels, float t, GObject gameObject) {
-		gameObject.renderAtTime(pixels, t);
+	public void renderFrameAt(int[] pixels, float t, float showPercent, GObject gameObject) {
+		gameObject.renderAtTime(pixels, t, showPercent);
 	}
 }

@@ -17,13 +17,13 @@ public class MainClass {
 		GSquare square = new GSquare(50, 50, 50, 50);
 		square.init();
 		
-		GTex tex = new GTex(50, 50, "\\frac{\\int_0^33 x \\times 5s}{5t \\times 2} + 2");
-		tex.init();
+		GTex tex2 = new GTex(50, 50, "\\int_3 \\frac{6/7x} + 8x");
+		tex2.init();
 		
 		
 		// ==== Animations ====
 		scene
-			.animate(AnimationList.STATIC_ANIMATION, AnimationLength.LONG, tex)
+			.animate(AnimationList.STATIC_ANIMATION, AnimationLength.ONE_FRAME, tex2)
 			.play();
 	}
 }

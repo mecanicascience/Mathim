@@ -54,7 +54,7 @@ public final class Logger {
 		
 		// Logs
 		if(e != null) {
-			System.err.print(str);
+			System.err.println(str);
 			e.printStackTrace();
 		}
 		else

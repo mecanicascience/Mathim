@@ -56,39 +56,9 @@ public final class TexRenderer {
 	 * @throws IOException
 	 */
 	private static void generateTexFromString(String latex, int animationID) throws IOException {
-		String content =
-			"\\documentclass[preview]{standalone}\r\n" + 
-			"\r\n" + 
-			"\\usepackage[french]{babel}\r\n" + 
-			"\\usepackage{amsmath}\r\n" + 
-			"\\usepackage{amssymb}\r\n" + 
-			"\\usepackage{dsfont}\r\n" + 
-			"\\usepackage{setspace}\r\n" + 
-			"\\usepackage{tipa}\r\n" + 
-			"\\usepackage{relsize}\r\n" + 
-			"\\usepackage{textcomp}\r\n" + 
-			"\\usepackage{mathrsfs}\r\n" + 
-			"\\usepackage{calligra}\r\n" + 
-			"\\usepackage{wasysym}\r\n" + 
-			"\\usepackage{ragged2e}\r\n" + 
-			"\\usepackage{physics}\r\n" + 
-			"\\usepackage{xcolor}\r\n" + 
-			"\\usepackage{microtype}\r\n" + 
-			"\\DisableLigatures{encoding = *, family = * }\r\n" + 
-			"%\\usepackage[UTF8]{ctex}\r\n" + 
-			"\\linespread{1}\r\n" + 
-			"\r\n" + 
-			"\\begin{document}\r\n" + 
-			"\r\n" + 
-			"\\begin{align*}\r\n";
-		
-		content += latex;
-		
-		content +=
-			"\r\n\\end{align*}\r\n" + 
-			"\r\n" + 
-			"\\end{document}";
-		
+		String template = FileUtils
+				.readFile(Paths.get(Constants.PATH_TO_RESOURCES + "tex_template.tex").toFile())
+				.replace("[here-goes-the-text]", latex);
 		
 		String dir = Constants.PATH_TO_RENDER + "partial/LaTeX";
 		new File(dir).mkdirs();
@@ -97,7 +67,7 @@ public final class TexRenderer {
 		new File(dir).mkdirs();
 		
 		
-		List<String> lines = Arrays.asList(content);
+		List<String> lines = Arrays.asList(template);
 		Path file = Paths.get(String.format(dir + "/%03d.tex", animationID));
 		Files.write(file, lines, StandardCharsets.UTF_8);
 	}

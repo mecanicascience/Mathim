@@ -35,69 +35,118 @@ public enum GPathType {
 	INITIAL_POINT,
 	
 	/**
+	 * Move the cursor to a new ABSOLUTE position without drawing
 	 * Equivalent to 'M'
+	 * @param New X position value
+	 * @param New Y position value
 	 */
 	MOVE_TO_ABS,
 	
 	/**
+	 * Move the cursor to a new RELATIVE position without drawing
 	 * Equivalent to 'm'
+	 * @param X displacement value
+	 * @param Y displacement value
 	 */
 	MOVE_TO,
 	
 	/**
+	 * Draw a line to a specific ABSOLUTE position from current position
 	 * Equivalent to 'L'
+	 * @param x X pointing position
+	 * @param y Y pointing position
 	 */
 	LINE_TO_ABS,
 	
 	/**
-	 * Draw a line to a specific RELATIVE position
+	 * Draw a line to a specific RELATIVE position from current position
 	 * Equivalent to 'l'
-	 * @param x Relative X pointing position
-	 * @param y Relative Y pointing position
-	 * @param thickness (Optional) thickness of the line
+	 * @param x X pointing position
+	 * @param y Y pointing position
 	 */
 	LINE_TO,
 	
 	/**
+	 * Draw a horizontal line to a specific ABSOLUTE position from current position
 	 * Equivalent to 'H'
+	 * @param x X pointing position
 	 */
 	HORIZONTAL_ABS,
 	
 	/**
+	 * Draw a horizontal line to a specific RELATIVE position from current position
 	 * Equivalent to 'h'
+	 * @param x X pointing position
 	 */
 	HORIZONTAL,
 	
 	/**
+	 * Draw a vertical line to a specific ABSOLUTE position from current position
 	 * Equivalent to 'V'
+	 * @param y Y pointing position
 	 */
 	VERTICAL_ABS,
 	
 	/**
+	 * Draw a vertical line to a specific RELATIVE position from current position
 	 * Equivalent to 'v'
+	 * @param y Y pointing position
 	 */
 	VERTICAL,
 	
 	/**
+	 * Draws a cubic Bézier curve from the current point to (x,y) as ABSOLUTE positions
+	 * Using (x1,y1) as the control point at the beginning of the curve and (x2,y2) as the control point at the end of the curve
+	 * This uses ABSOLUTE coordinates
 	 * Equivalent to 'C'
+	 * @param x End X position
+	 * @param y End Y position
+	 * @param x1 First X control point
+	 * @param y1 First Y control point
+	 * @param x2 Second X control point
+	 * @param y2 Second Y control point
 	 */
 	CURVE_BEZ_ABS,
 	
 	/**
+	 * Draws a cubic Bézier curve from the current point to (x, y) as RELATIVE positions
+	 * Using (x1, y1) as the control point at the beginning of the curve and (x2, y2) as the control point at the end of the curve
+	 * This uses RELATIVE coordinates
 	 * Equivalent to 'c'
+	 * @param x End X position
+	 * @param y End Y position
+	 * @param x1 First X control point
+	 * @param y1 First Y control point
+	 * @param x2 Second X control point
+	 * @param y2 Second Y control point
 	 */
 	CURVE_BEZ,
 	
 	/**
+	 * Draws a cubic Bézier curve from the current point to (x, y) as ABSOLUTE positions
+	 * It's like a 'C' Bezier curve with the first control point (x1, y1) that equals (x, y)
 	 * Equivalent to 'S'
+	 * @param x End X position (and first X control point)
+	 * @param y End Y position (and first Y control point)
+	 * @param x1 Second X control point
+	 * @param y1 Second Y control point
 	 */
 	SHORTHAND_CURVE_BEZ_ABS,
 	
 	/**
+	 * Draws a cubic Bézier curve from the current point to (x, y) as RELATIVE positions
+	 * It's like a 'c' Bezier curve with the first control point (x1, y1) that equals (x, y)
 	 * Equivalent to 's'
+	 * @param x End X position (and first X control point)
+	 * @param y End Y position (and first Y control point)
+	 * @param x1 Second X control point
+	 * @param y1 Second Y control point
 	 */
 	SHORTHAND_CURVE_BEZ,
 	
+	
+	
+	/** @TODO Add these followings elements description */
 	/**
 	 * Equivalent to 'Q'
 	 */

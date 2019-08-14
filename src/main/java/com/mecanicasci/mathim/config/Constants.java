@@ -19,6 +19,9 @@ public final class Constants {
 	/** FFMPEG rendering log level ("info" to show all informations) */
 	public static final String FFMPEG_ERROR_LEVEL = DebugLevel.getFFMPEGLogLevel(Scene.debug); 
 	
+	/** Iteration of the bezier value (smaller takes more time but has better results => 0 < VALUE < 1) */
+	public static final float BEZIER_ITERATION_SIZE = 0.0001f;
+	
 	
 	
 	/** ========== DISPLAYING FORMAT CONSTANTS ========== */
@@ -45,4 +48,7 @@ public final class Constants {
 	public static final String IMAGE_TMP_ID = "frame_%04d.png";
 	/** Name of the file that describe all 'sub-mp4' files to render final mp4 */
 	public static final String FFMPEG_MP4_DESCRIPTION_FILE = "partial_mp4_list.txt";
+
+	/** Path to the folder that contains all resources */
+	public static final String PATH_TO_RESOURCES = "resources/";
 }

@@ -43,9 +43,11 @@ public final class PixelDrawer {
 		
 		int index = (x + y * Constants.WIDTH) * 4;
 		
-		pixels[index    ] = r;
-		pixels[index + 1] = g;
-		pixels[index + 2] = b;
-		pixels[index + 3] = a;
+		if(index < pixels.length) {
+			pixels[index    ] = r;
+			pixels[index + 1] = g;
+			pixels[index + 2] = b;
+			pixels[index + 3] = a;
+		}
 	}
 }

@@ -40,9 +40,10 @@ public abstract class Animation {
 	 * Update the pixels for the specific frame and for the specific gameObject
 	 * @param pixels the pixel array
 	 * @param t the time of the frame (in seconds)
+	 * @param showPercent Percentage of the animation shown
 	 * @param gameObject
 	 */
-	public abstract void renderFrameAt(int[] pixels, float t, GObject gameObject);
+	public abstract void renderFrameAt(int[] pixels, float t, float showPercent, GObject gameObject);
 	
 	
 	
@@ -53,8 +54,9 @@ public abstract class Animation {
 	 * @param t the time of the frame (in seconds)
 	 */
 	public void renderFrameAt(int[] pixels, float t) {
+		/** @TODO Duration length temp */
 		for (GObject gameObject : this.gObjects)
-			this.renderFrameAt(pixels, t, gameObject);
+			this.renderFrameAt(pixels, t, t / animLength.getDuration(), gameObject);
 	}
 	
 	
